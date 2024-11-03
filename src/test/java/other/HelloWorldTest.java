@@ -1,25 +1,38 @@
+package other;
+
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class HelloWorldTest {
 
-    @Test
-    void testRestAssured () {
+    @ParameterizedTest
+    @ValueSource(strings = {"", "John", "Pete"})
+    void testHelloMethodWithoutName (String name) {
+        Map<String, String> queryParams = new HashMap<>();
+
+        if(name.length() > 0) {
+            queryParams.put("name", name);
+        }
 
         JsonPath response = RestAssured
                 .given()
-                .when()
-                .get("https://playground.learnqa.ru/api/get_json_homework")
+                .queryParams(queryParams)
+                .get("https://playground.learnqa.ru/api/hello")
                 .jsonPath();
-        response.prettyPrint();
+        String answer = response.getString("answer");
+        String expectedName = (name.length() > 0) ? name : "someone";
 
-        ArrayList<LinkedHashMap<String, String>> messages = response.get("messages");
-        LinkedHashMap<String, String> message = messages.get(1);
+        assertEquals("Hello, " + expectedName, answer, "The answer is not expected");
+    }
 
-        System.out.println(message.get("message"));
+
+
 
 //        System.out.println("\nPretty text:");
 //        response.prettyPrint();
@@ -124,5 +137,33 @@ public class HelloWorldTest {
 //                .andReturn();
 //
 //        responseForCheck.print(); // успешно авторизовались
-    }
+//      --------------------------------------
+//        JsonPath response = RestAssured
+//                .given()
+//                .when()
+//                .get("https://playground.learnqa.ru/api/get_json_homework")
+//                .jsonPath();
+//        response.prettyPrint();
+//
+//        ArrayList<LinkedHashMap<String, String>> messages = response.get("messages");
+//        LinkedHashMap<String, String> message = messages.get(1);
+//
+//        System.out.println(message.get("message"));
+//    ----------------------------------
+//      @Test
+//      void testRestAssured () {
+//          Response response = RestAssured
+//            .get("https://playground.learnqa.ru/api/map")
+//            .andReturn();
+//    //assertTrue(response.statusCode() == 200, "Unexpected status code"); // если condition вернет false, то увидим message
+//    assertEquals(200, response.statusCode(), "Unexpected status code");
+//     }
+//       @Test
+//       void testFailed() {
+//          Response response = RestAssured
+//                .get("https://playground.learnqa.ru/api/map2")
+//                .andReturn();
+//        //assertTrue(response.statusCode() == 200, "Unexpected status code"); // если condition вернет false, то увидим message
+//        assertEquals(200, response.statusCode(), "Unexpected status code");
+//    }
 }

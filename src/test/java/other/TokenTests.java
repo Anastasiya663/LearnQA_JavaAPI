@@ -1,3 +1,5 @@
+package other;
+
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import org.apache.commons.lang3.Validate;
