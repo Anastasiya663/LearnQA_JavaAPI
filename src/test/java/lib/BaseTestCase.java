@@ -3,6 +3,7 @@ package lib;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import java.util.Map;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.hasKey;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,5 +25,16 @@ public class BaseTestCase {
     protected int getIntFromJson(Response Response, String name) {
         Response.then().assertThat().body("$", hasKey(name));
         return Response.jsonPath().getInt(name);
+    }
+
+    protected String getAbsentParameterOfMap(Map<String, String> userData) {
+        Set<Map.Entry<String, String>> entrySet = userData.entrySet();
+        String absentParameter = "";
+        for (Map.Entry<String, String> pair : entrySet) {
+            if (pair.getValue() == null) {
+                absentParameter = pair.getKey();
+            }
+        }
+        return absentParameter;
     }
 }
