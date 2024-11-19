@@ -1,6 +1,6 @@
 package tests;
 
-import io.restassured.RestAssured;
+import io.qameta.allure.Description;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
 import lib.Assertions;
@@ -17,7 +17,8 @@ public class UserRegisterTest extends BaseTestCase {
 
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
 
-    @Test // создание пользователя с уже существующим email
+    @Test
+    @Description("Создание пользователя с уже существующим email")
     public void testCreateUserWithExistingEmail() {
         String email = "vinkotov@example.com";
 
@@ -43,7 +44,8 @@ public class UserRegisterTest extends BaseTestCase {
         Assertions.assertResponseTextEquals(responseCreateAuth, "Users with email '" + email + "' already exists");
     }
 
-    @Test //Создание пользователя с некорректным email - без символа @
+    @Test
+    @Description("Создание пользователя с  некорректным email - без символа @")
     public void testCreateUserWithWrongEmail() {
 
         Map<String, String> userData = new HashMap<>();
@@ -68,7 +70,8 @@ public class UserRegisterTest extends BaseTestCase {
         Assertions.assertResponseTextEquals(responseCreateAuth, "Invalid email format");
     }
 
-    @ParameterizedTest //Создание пользователя без указания одного из полей
+    @ParameterizedTest
+    @Description("Создание пользователя без указания одного из полей")
     @CsvSource({
             "'petrov1@example.com', '12345', 'username', 'firstName',",
             "'petrov1@example.com', '12345', 'username', , 'lastName'",
@@ -101,7 +104,8 @@ public class UserRegisterTest extends BaseTestCase {
         Assertions.assertResponseTextEquals(responseCreateAuth, "The following required params are missed: " + getAbsentParameterOfMap(userData));
     }
 
-    @Test //Создание пользователя с очень коротким именем в один символ
+    @Test
+    @Description("Создание пользователя с очень коротким именем в один символ")
     public void testCreateUserWithTooShortName() {
         String username = String.valueOf(DataGenerator.getRandomShortName());
 
@@ -127,7 +131,8 @@ public class UserRegisterTest extends BaseTestCase {
         Assertions.assertResponseTextEquals(responseCreateAuth, "The value of 'username' field is too short");
     }
 
-    @Test //Создание пользователя с очень длинным именем - длиннее 250 символов
+    @Test
+    @Description("Создание пользователя с очень длинным именем - длиннее 250 символов")
     public void testCreateUserWithTooLongName() {
         String username = DataGenerator.getRandomLongName();
 

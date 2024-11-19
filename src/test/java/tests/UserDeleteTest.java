@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
@@ -14,6 +16,8 @@ import java.util.Map;
 public class UserDeleteTest extends BaseTestCase {
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
 
+    @Feature(value = "Удаление пользователя")
+    @Story("Удаление пользователя по ID 2")
     @Test //попытка удалить пользователя по ID 2
     public void testDeleteUserWithId2() {
 
@@ -49,7 +53,8 @@ public class UserDeleteTest extends BaseTestCase {
         Assertions.assertResponseCodeEquals(responseDeleteUser, 400);
         Assertions.assertJsonByName(responseDeleteUser, "error", "Please, do not delete test users with ID 1, 2, 3, 4 or 5.");
     }
-
+    @Feature(value = "Удаление пользователя")
+    @Story(value = "Успешное удаление")
     @Test //успешное удаление пользователя
     public void testDeleteSuccess() {
         //GENERATE USER
@@ -113,8 +118,9 @@ public class UserDeleteTest extends BaseTestCase {
 
         Assertions.assertResponseTextEquals(responseUserData, "User not found");
     }
-
-    @Test //удалить пользователя, будучи авторизованными другим пользователем
+    @Feature(value = "Удаление пользователя")
+    @Story(value = "Удаление с невалидной авторизацией")
+    @Test
     public void testDeleteFailed() {
         //GENERATE USER
         Map<String, String> userData = DataGenerator.getRegistrationData();

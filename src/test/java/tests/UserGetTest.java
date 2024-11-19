@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.Issue;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
 import lib.Assertions;
@@ -12,6 +13,7 @@ import java.util.Map;
 public class UserGetTest extends BaseTestCase {
 
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
+    @Issue(value = "TGFR-1256")
     @Test
     public void testGetUserDataNotAuth() {
 
